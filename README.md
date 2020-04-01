@@ -5,7 +5,7 @@ Node CLI tool to import a CSV into ClearPass via the RESTful API.
 Currently supports Guests and Devices.  Reference the built in documentation for help.
 
 ```
-npm install -g clearpass-csv2api
+sudo npm install -g clearpass-csv2api
 ```
 
 ```
