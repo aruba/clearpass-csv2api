@@ -46,7 +46,7 @@ const IMPORTING =
 const program = require('commander');
  
 program
-    .version('0.9.5')
+    .version('0.9.6')
     .helpOption('-h, --help', 'Display help for command')
     .option('-v, --verbose', 'Output extra debugging', false)
     .option('--importing <importing>', 'What is being imported.  Current accepted values: ' + Object.keys(IMPORTING).join(', '), 'device') // Match names from API Explorer
@@ -235,10 +235,21 @@ function createClient(options) {
 function normalizeData(data, options) {
     let i = 0;
     let len = options.exclude.length;
-    for (; i < len; i++) { 
+    for (i = 0; i < len; i++) {
         delete data[options.exclude[i]];
     }
     Object.assign(data, options.extra);
+    let booleans = ['enabled'];
+    len = booleans.length;
+    for (i = 0; i < len; i++) {
+        if (typeof data[booleans[i]] == 'string') {
+            let b = data[booleans[i]].toLowerCase();
+            data[booleans[i]] = b == '1'
+                || b == 'true'
+                || b == 'yes'
+                || b == 'on';
+        }
+    }
     return data;
 }
 
