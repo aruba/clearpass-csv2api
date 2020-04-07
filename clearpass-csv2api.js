@@ -46,7 +46,7 @@ const IMPORTING =
 const program = require('commander');
  
 program
-    .version('0.9.3')
+    .version('0.9.4')
     .helpOption('-h, --help', 'Display help for command')
     .option('-v, --verbose', 'Output extra debugging', false)
     .option('--importing <importing>', 'What is being imported.  Current accepted values: ' + Object.keys(IMPORTING).join(', '), 'device') // Match names from API Explorer
@@ -453,6 +453,12 @@ function commandActionTestCSV(csv_file, options) {
     fs.createReadStream(csv_file)
         .pipe(csv({ strict: true }))
         .on('headers', (headers) => {
+            // Catches EFBBBF (UTF-8 BOM) because the buffer-to-string
+            // conversion translates it to FEFF (UTF-16 BOM)
+            if (headers[0].charCodeAt(0) === 0xFEFF) {
+                headers[0] = headers[0].slice(1);
+                this.headers = headers;
+            }
             let validated = validateHeaders(headers, options, imp);
             if (validated !== true) {
                 if (errors[validated]) {
@@ -536,6 +542,12 @@ function commandActionImportCsv(csv_file, options) {
     fs.createReadStream(csv_file)
         .pipe(csv({ strict: true }))
         .on('headers', (headers) => {
+            // Catches EFBBBF (UTF-8 BOM) because the buffer-to-string
+            // conversion translates it to FEFF (UTF-16 BOM)
+            if (headers[0].charCodeAt(0) === 0xFEFF) {
+                headers[0] = string.slice(1);
+                this.headers = headers;
+            }
             let validated = validateHeaders(headers, options, imp);
             if (validated !== true) {
                 console.error(validated);
