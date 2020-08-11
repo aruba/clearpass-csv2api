@@ -46,13 +46,10 @@ const IMPORTING =
 const program = require('commander');
  
 program
-    .version('0.9.6')
+    .version('0.9.7')
     .helpOption('-h, --help', 'Display help for command')
     .option('-v, --verbose', 'Output extra debugging', false)
     .option('--importing <importing>', 'What is being imported.  Current accepted values: ' + Object.keys(IMPORTING).join(', '), 'device') // Match names from API Explorer
-    // TODO:
-    // prefer create/prefer update
-    // update-ok / create-ok
     .on('option:verbose', function() {
         if (this.verbose) log.level = 'debug';
     })
