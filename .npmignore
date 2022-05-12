@@ -1,0 +1,5 @@
+*.csv
+*.CSV
+.DS_Store
+*.swp
+.gitignore

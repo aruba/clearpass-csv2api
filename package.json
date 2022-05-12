@@ -1,6 +1,6 @@
 {
     "name": "clearpass-csv2api",
-    "version": "0.9.8",
+    "version": "0.9.9",
     "description": "Helper CLI tool that will convert a local CSV file to a series of REST POST creation calls.",
     "homepage": "https://github.com/aruba/clearpass-csv2api",
     "main": "clearpass-csv2api.js",
@@ -27,9 +27,9 @@
     },
     "license": "Apache-2.0",
     "dependencies": {
-        "async": "^3.2.0",
+        "async": "^3.2.1",
         "commander": "^5.0.0",
-        "log4js": "^6.1.2",
+        "log4js": "^6.4.2",
         "csv-parser": "^2.3.2",
         "aruba-clearpass-api": "^2.0.3"
     }

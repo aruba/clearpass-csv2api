@@ -105,3 +105,7 @@ dist
 
 # vim
 *.swp
+
+*.csv
+*.CSV
+.DS_Store
