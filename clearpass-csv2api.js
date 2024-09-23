@@ -43,10 +43,10 @@ const IMPORTING =
     }*/ 
 };
 
-const program = require('commander');
+const { program } = require('commander');
  
 program
-    .version('0.9.8')
+    .version('1.0.0')
     .helpOption('-h, --help', 'Display help for command')
     .option('-v, --verbose', 'Output extra debugging', false)
     .option('--importing <importing>', 'What is being imported.  Current accepted values: ' + Object.keys(IMPORTING).join(', '), 'device') // Match names from API Explorer
@@ -142,25 +142,22 @@ program
     .description('Test connectivity, authentication and privileges')
     .option('--host <host>', 'The IP address/hostname of ClearPass.', '127.0.0.1')
     //.option('-p, --port <port>', 'Port override', 443)
-    .option('--insecure', 'Disable SSL validation', false)
     .option('--client_id <client_id>', 'API Client ID', 'Client1')
     .option('--client_secret <client_secret>', 'API Client Secret', '')
     .option('--insecure', 'Disable SSL validation', false)
-    .on('--help', () => {
-        console.log('');
-        console.log('API Clients are created in Guest » Administration » API Services » API Clients.');
-        console.log('You need the following set:');
-        console.log('  * Operating Mode: ClearPass REST API');
-        console.log('  * Operator Profile: A profile with sufficient privileges');
-        console.log('  * Grant Type: Client Credentials');
-        console.log('The Client ID and Client Secret are passed as arguments.  Ensure you protect the secret.');
-        console.log('');
-        console.log('Privileges:');
-        console.log('  * ALL  : API Services > Allow API Access');
-        console.log('  * Devices  : Devices > Create New Device and Guest Manager > Full User Control');
-        console.log('  * Guests   : Guest Manager > Create New Guest Account and Guest Manager > Full User Control');
-        //console.log('  * Endpoints: Policy Manager > Identity - Endpoints');
-        console.log('');})
+    .addHelpText('after', `
+API Clients are created in Guest » Administration » API Services » API Clients.
+You need the following set:
+  * Operating Mode: ClearPass REST API
+  * Operator Profile: A profile with sufficient privileges
+  * Grant Type: Client Credentials
+The Client ID and Client Secret are passed as arguments.  Ensure you protect the secret.
+
+Privileges:
+  * ALL  : API Services > Allow API Access
+  * Devices  : Devices > Create New Device and Guest Manager > Full User Control
+  * Guests   : Guest Manager > Create New Guest Account and Guest Manager > Full User Control
+`)
     .action(commandActionPing);
 
 // Generate a randomized csv
@@ -170,28 +167,27 @@ program
     .option('-x --extra <extra>', 'An extra key=value pair. Multiple supported.', collectPairs, {})
     .action(commandActionGenerate);
 
-program.on('--help', () => {
-    console.log('');
-    console.log('Example calls:');
-    console.log('');
-    console.log('  Confirm credentials and permissions:');
-    console.log('  $ clearpass-csv2api ping --host=192.0.2.10 --client_id=Client1 --client_secret=asdfadsf');
-    console.log('');
-    console.log('  Test the CSV:');
-    console.log('  $ clearpass-csv2api testcsv devices.csv');
-    console.log('  $ clearpass-csv2api --importing=guest testcsv guest.csv');
-    console.log('');
-    console.log('  Initiate the import:');
-    console.log('  $ clearpass-csv2api --verbose import --host 192.0.2.10 --client_id=Client1 --client_secret=asdfadsf devices.csv');
-    console.log('  $ clearpass-csv2api --verbose import --host 192.0.2.10 --client_id=Client1 --client_secret=asdfadsf --strategy=update-or-create devices-sync.csv');
-    console.log('  $ clearpass-csv2api --verbose --importing=guest import --host 192.0.2.10 --client_id=Client1 --client_secret=asdfadsf guests.csv');
-    console.log('  $ clearpass-csv2api --verbose import --host 192.0.2.10 --client_id=Client1 --client_secret=asdfadsf --exclude=id,region -x "notes=Import from ACME" -x "visitor_company=IoT Corp" devices.csv');
-    console.log('');
-    console.log('  Generate test data:');
-    console.log('  $ clearpass-csv2api generate 100 > devices-100.csv');
-    console.log('  $ clearpass-csv2api generate 100 -x role_id=1 -x "notes=Import from ACME" > devices-ACME-Contractors.csv');
-    console.log('  $ clearpass-csv2api --importing=guest generate 100 > guests-100.csv');
-});
+program.addHelpText('after', `
+Example calls:
+
+  Confirm credentials and permissions:
+  $ clearpass-csv2api ping --host=192.0.2.10 --client_id=Client1 --client_secret=asdfadsf
+
+  Test the CSV:
+  $ clearpass-csv2api testcsv devices.csv
+  $ clearpass-csv2api --importing=guest testcsv guest.csv
+
+  Initiate the import:
+  $ clearpass-csv2api --verbose import --host 192.0.2.10 --client_id=Client1 --client_secret=asdfadsf devices.csv
+  $ clearpass-csv2api --verbose import --host 192.0.2.10 --client_id=Client1 --client_secret=asdfadsf --strategy=update-or-create devices-sync.csv
+  $ clearpass-csv2api --verbose --importing=guest import --host 192.0.2.10 --client_id=Client1 --client_secret=asdfadsf guests.csv
+  $ clearpass-csv2api --verbose import --host 192.0.2.10 --client_id=Client1 --client_secret=asdfadsf --exclude=id,region -x "notes=Import from ACME" -x "visitor_company=IoT Corp" devices.csv
+
+  Generate test data:
+  $ clearpass-csv2api generate 100 > devices-100.csv
+  $ clearpass-csv2api generate 100 -x role_id=1 -x "notes=Import from ACME" > devices-ACME-Contractors.csv
+  $ clearpass-csv2api --importing=guest generate 100 > guests-100.csv
+`);
 
 /**
  * Need to accumulate -x --extra
