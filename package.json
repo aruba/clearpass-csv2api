@@ -1,36 +1,38 @@
 {
-    "name": "clearpass-csv2api",
-    "version": "1.0.0",
-    "description": "Helper CLI tool that will convert a local CSV file to a series of REST POST creation calls.",
-    "homepage": "https://github.com/aruba/clearpass-csv2api",
-    "main": "clearpass-csv2api.js",
-    "bin": "./clearpass-csv2api.js",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/aruba/clearpass-csv2api.git"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": [
-        "clearpass",
-        "aruba",
-        "networks",
-        "clearpass",
-        "api",
-        "csv"
-    ],
-    "author": {
-        "name": "Garth Benedict (HPE)",
-        "email": "garth.benedict@hpe.com",
-        "url": "http://www.arubanetworks.com/"
-    },
-    "license": "Apache-2.0",
-    "dependencies": {
-        "async": "^3.2.6",
-        "commander": "^12.1.0",
-        "log4js": "^6.9.1",
-        "csv-parser": "^3.0.0",
-        "aruba-clearpass-api": "^2.2.0"
-    }
+  "name": "clearpass-csv2api",
+  "version": "1.0.0",
+  "description": "Helper CLI tool that will convert a local CSV file to a series of REST POST creation calls.",
+  "homepage": "https://github.com/aruba/clearpass-csv2api",
+  "main": "clearpass-csv2api.js",
+  "bin": "./clearpass-csv2api.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/aruba/clearpass-csv2api.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "clearpass",
+    "aruba",
+    "networks",
+    "clearpass",
+    "api",
+    "csv"
+  ],
+  "author": {
+    "name": "Garth Benedict (HPE)",
+    "email": "garth.benedict@hpe.com",
+    "url": "http://www.arubanetworks.com/"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "aruba-clearpass-api": "^2.2.0",
+    "async": "^3.2.6",
+    "commander": "^12.1.0",
+    "csv-parser": "^3.0.0"
+  },
+  "devDependencies": {
+    "standard": "^17.1.2"
+  }
 }
