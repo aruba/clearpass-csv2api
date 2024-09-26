@@ -81,8 +81,9 @@ program
   .command('import <csv_file>'/*, { isDefault: true } */)
   .description('Import a CSV of items into ClearPass')
   .option('--host <host>', 'The IP address/hostname of ClearPass.', '127.0.0.1')
-// .option('-p, --port <port>', 'Port override', 443)
+  // .option('-p, --port <port>', 'Port override', 443)
   .option('--insecure', 'Disable SSL validation', false)
+  .option('--token <token>', 'Generated Bearer token', '')
   .option('--client_id <client_id>', 'API Client ID', 'Client1')
   .option('--client_secret <client_secret>', 'API Client Secret', '')
   .option('-x --extra <extra>', 'An extra key=value pair. Multiple supported.', collectPairs, {})
@@ -99,6 +100,12 @@ program
     `, 'create-only')
   .option('--change-of-authorization', 'Send RADIUS CoA requests', false) // changeOfAuthorization
   .option('--dry-run', 'Dry run, do not send any API', false) // dryRun
+  .on('option:token', function () {
+    // aruba-clearpass-api auto adds 'Bearer '
+    if (this.opts().token.substring(0, 7).toLowerCase() === 'bearer ') {
+      this.opts().token = this.opts().token.substring(7)
+    }
+  })
   .on('option:exclude', function () {
     this.opts().exclude = typeof (this.opts().exclude) === 'string' ? this.opts().exclude.split(',') : []
   })
@@ -135,11 +142,22 @@ program
   .command('ping')
   .description('Test connectivity, authentication and privileges')
   .option('--host <host>', 'The IP address/hostname of ClearPass.', '127.0.0.1')
-// .option('-p, --port <port>', 'Port override', 443)
+  // .option('-p, --port <port>', 'Port override', 443)
+  .option('--token <token>', 'Generated Bearer token', '')
   .option('--client_id <client_id>', 'API Client ID', 'Client1')
   .option('--client_secret <client_secret>', 'API Client Secret', '')
   .option('--insecure', 'Disable SSL validation', false)
+  .on('option:token', function () {
+    // aruba-clearpass-api auto adds 'Bearer '
+    if (this.opts().token.substring(0, 7).toLowerCase() === 'bearer ') {
+      this.opts().token = this.opts().token.substring(7)
+    }
+  })
   .addHelpText('after', `
+To override the port, pass --host <host>:<port>.
+
+Pass either --client_id and --client_secret or simply --token.  Generate Access Token in the UI can be used to generate a short term token.
+
 API Clients are created in Guest » Administration » API Services » API Clients.
 You need the following set:
   * Operating Mode: ClearPass REST API
@@ -205,6 +223,7 @@ function collectPairs (value, previous) {
 function createClient (options) {
   const client = new CppmApi({
     host: options.host,
+    token: options.token,
     clientId: options.client_id,
     clientSecret: options.client_secret,
     sslValidation: !options.insecure
